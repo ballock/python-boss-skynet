@@ -290,8 +290,8 @@ class Exo(object):
                 logging.shutdown()
                 sys.exit(0)
 
-            except IOError:
-                self.log.debug("p.run() interrupted - IOError")
+            except IOError as e:
+                self.log.warning("p.run() interrupted - IOError %s" % e)
                 if self.graceful_shutdown:
                     self.log.info("Now shutting down")
                     self.handler.handle_lifecycle_control(WorkItemCtrl("die"))
@@ -302,8 +302,8 @@ class Exo(object):
                 self.handler.handle_lifecycle_control(WorkItemCtrl("stop"))
                 self.graceful_shutdown = True
 
-            except Exception:
-                self.log.debug("p.run() interrupted")
+            except Exception as e:
+                self.log.warning("p.run() interrupted - %s" % e)
                 traceback.print_exc()
                 logging.shutdown()
                 sys.exit(1)
